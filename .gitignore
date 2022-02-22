@@ -1,0 +1,10 @@
+.DS_Store
+.idea
+*/.idea
+
+# Ignore all built projects to keep repository light weight.
+# This project will never be ran outside of local machines or CI
+apps/*/android
+apps/*/ios
+apps/*/web
+apps/*/windows
