@@ -8,3 +8,4 @@ apps/*/android
 apps/*/ios
 apps/*/web
 apps/*/windows
+apps/*/*.g.dart

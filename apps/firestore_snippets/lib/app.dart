@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firestore_snippets/snippets/firestore.dart';
 import 'package:flutter/material.dart';
 
-late FirebaseFirestore db;
-
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({
     Key? key,
     required this.firestore,
@@ -12,34 +11,24 @@ class MyApp extends StatelessWidget {
   final FirebaseFirestore firestore;
 
   @override
-  Widget build(BuildContext context) {
-    db = firestore;
-    return MaterialApp(
-      title: 'Tasty Eats',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const TastyEatsApp(),
-    );
-  }
+  State<MyApp> createState() => _MyAppState();
 }
 
-class TastyEatsApp extends StatelessWidget {
-  const TastyEatsApp({Key? key}) : super(key: key);
+class _MyAppState extends State<MyApp> {
+  late final FirestoreSnippets _firestoreSnippets;
+
+  @override
+  void initState() {
+    _firestoreSnippets = FirestoreSnippets(widget.firestore);
+
+    _firestoreSnippets.runAll();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: const Center(
-        child: Text('Welcome to Tasty Eats'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => {
-          db.collection('restaurants').add({
-            "name": "Papa Johns",
-          })
-        },
-      ),
+    return MaterialApp(
+      home: Container(),
     );
   }
 }
