@@ -1,9 +1,3 @@
-so far:
-- installed flutter, intellij, intellij plugins
-- created firebase project, downloaded firebase CLI, installed flutterfirecli
-- `flutter create firestore-snippets && cd firestore-snippets`
-- `flutterfire-configure`
-
 
 # Firebase Flutter Snippets
 
@@ -14,6 +8,12 @@ These snippets are part of our documentation and best read in the context of a d
 
 Each snippet has a "region tag" which is defined by `// [START tag]` and `// [END tag]` comments. The code between the tags can be included in our documentation. Keeping the code on GitHub, rather than hard-coded into the HTML of our documentation, allows us to ensure the code is correct and up to date.
 
+
+## Set up / Running Instructions - WIP
+- installed flutter, intellij, intellij plugins
+- created firebase project, downloaded firebase CLI, installed flutterfirecli
+- `flutter create firestore-snippets && cd firestore-snippets`
+- `flutterfire-configure`
 
 [comment]: <> (## Example)
 
