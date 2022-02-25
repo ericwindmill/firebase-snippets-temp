@@ -38,9 +38,36 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
     }
-
     throw UnsupportedError(
       'DefaultFirebaseOptions are not supported for this platform.',
     );
   }
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDu2FRBnv0pV01dHHOQuk26pR1oYcZpGTE',
+    appId: '1:220375889386:web:bc468dd9e586597b6bae93',
+    messagingSenderId: '220375889386',
+    projectId: 'flutter-fire-snippets',
+    authDomain: 'flutter-fire-snippets.firebaseapp.com',
+    storageBucket: 'flutter-fire-snippets.appspot.com',
+  );
+
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyC2bbpFcMWgGpKKEmqNw57Al2vdV4QnNP0',
+    appId: '1:220375889386:android:1a16e85eeab0d5896bae93',
+    messagingSenderId: '220375889386',
+    projectId: 'flutter-fire-snippets',
+    storageBucket: 'flutter-fire-snippets.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyDNp5_kQjIgyS_UMtv9oRKcbCjOfYB1LNc',
+    appId: '1:220375889386:ios:0fec9df2e96f0db36bae93',
+    messagingSenderId: '220375889386',
+    projectId: 'flutter-fire-snippets',
+    storageBucket: 'flutter-fire-snippets.appspot.com',
+    iosClientId:
+        '220375889386-8v73sv2lia3e7c12h0btp2tfbj0um4it.apps.googleusercontent.com',
+    iosBundleId: 'com.fluttersnippets.app',
+  );
 }
