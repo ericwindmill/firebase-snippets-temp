@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'firebase_options.dart';
 
 void main() async {
+  // TODO: special-case -- be sure to document
 // [START get_firestore_instance]
 
   /// In the Firebase documentation, the code should look like the following example
@@ -34,6 +35,18 @@ void main() async {
   );
 
   final db = FirebaseFirestore.instance;
+  // TODO: special-case -- be sure to document
+
+  // [START access_data_offline_configure_offline_persistence]
+  final settings = db.settings.copyWith(persistenceEnabled: true);
+  // [END access_data_offline_configure_offline_persistence]
+
+  // [START access_data_offline_configure_offline_persistence]
+  final updatedSettings =
+      db.settings.copyWith(cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
+  db.settings = settings;
+  // [END access_data_offline_configure_offline_persistence]
+
   if (!kReleaseMode) db.useFirestoreEmulator('localhost', 8080);
 
   runApp(

@@ -504,7 +504,7 @@ batch.commit().then(() => {
   void listenToRealtimeUpdates_listToMultipleDocuments() {
     // [START listen_to_realtime_updates_list_to_multiple_documents]
     db
-        .collection("Cities")
+        .collection("cities")
         .where("state", isEqualTo: "CA")
         .snapshots()
         .listen((event) {
@@ -512,7 +512,7 @@ batch.commit().then(() => {
       for (var doc in event.docs) {
         cities.add(doc.data()["name"]);
       }
-      print("Cities in CA: ${cities.join(", ")}");
+      print("cities in CA: ${cities.join(", ")}");
     });
     // [END listen_to_realtime_updates_list_to_multiple_documents]
   }
@@ -520,7 +520,7 @@ batch.commit().then(() => {
   void listenToRealtimeUpdates_viewUpdatesBetweenChanges() {
     // [START listen_to_realtime_updates_view_updates_between_changes]
     db
-        .collection("Cities")
+        .collection("cities")
         .where("state", isEqualTo: "CA")
         .snapshots()
         .listen((event) {
@@ -559,5 +559,376 @@ batch.commit().then(() => {
           onError: (error) => print("Listen failed: $error"),
         );
     // [END listen_to_realtime_updates_handle_listen_errors]
+  }
+
+  void performSimpleAndCompoundQueries_exampleData() {
+    // [START perform_simple_and_compound_queries_example_data]
+    /*
+
+   */
+    final cities = db.collection("cities");
+    final data1 = <String, dynamic>{
+      "name": "San Francisco",
+      "state": "CA",
+      "country": "USA",
+      "capital": false,
+      "population": 860000,
+      "regions": ["west_coast", "norcal"]
+    };
+    cities.doc("SF").set(data1);
+
+    final data2 = <String, dynamic>{
+      "name": "Los Angeles",
+      "state": "CA",
+      "country": "USA",
+      "capital": false,
+      "population": 3900000,
+      "regions": ["west_coast", "socal"],
+    };
+    cities.doc("LA").set(data2);
+
+    final data3 = <String, dynamic>{
+      "name": "Washington D.C.",
+      "state": null,
+      "country": "USA",
+      "capital": true,
+      "population": 680000,
+      "regions": ["east_coast"]
+    };
+    cities.doc("DC").set(data3);
+
+    final data4 = <String, dynamic>{
+      "name": "Tokyo",
+      "state": null,
+      "country": "Japan",
+      "capital": true,
+      "population": 9000000,
+      "regions": ["kanto", "honshu"]
+    };
+    cities.doc("TOK").set(data4);
+
+    final data5 = <String, dynamic>{
+      "name": "Beijing",
+      "state": null,
+      "country": "China",
+      "capital": true,
+      "population": 21500000,
+      "regions": ["jingjinji", "hebei"],
+    };
+    cities.doc("BJ").set(data5);
+    // [END perform_simple_and_compound_queries_example_data]
+  }
+
+  void performSimpleAndCompoundQueries_simpleQueries() {
+    // [START perform_simple_and_compound_queries_simple_queries]
+    // Create a reference to the cities collection
+    final citiesRef = db.collection("cities");
+
+    // Create a query against the collection.
+    final query = citiesRef.where("state", isEqualTo: "CA");
+    // [END perform_simple_and_compound_queries_simple_queries]
+  }
+
+  void performSimpleAndCompoundQueries_simpleQueries2() {
+    // [START perform_simple_and_compound_queries_simple_queries2]
+    final capitalcities =
+        db.collection("cities").where("capital", isEqualTo: true);
+    // [END perform_simple_and_compound_queries_simple_queries2]
+  }
+
+  void performSimpleAndCompoundQueries_executeAQuery() {
+    // [START perform_simple_and_compound_queries_execute_a_query]
+    db.collection("cities").where("capital", isEqualTo: true).get().then(
+          (res) => print("Successfully completed"),
+          onError: (e) => print("Error completing: $e"),
+        );
+    // [END perform_simple_and_compound_queries_execute_a_query]
+  }
+
+  void performSimpleAndCompoundQueries_queryOperators() {
+    // [START perform_simple_and_compound_queries_query_operators]
+    /*
+
+   */
+    final citiesRef = db.collection("cities");
+    final stateQuery = citiesRef.where("state", isEqualTo: "CA");
+    final populationQuery = citiesRef.where("population", isLessThan: 100000);
+    final nameQuery = citiesRef.where("name", isEqualTo: "San Francisco");
+    // [END perform_simple_and_compound_queries_query_operators]
+  }
+
+  void performSimpleAndCompoundQueries_notEqual() {
+    // [START perform_simple_and_compound_queries_not_equal]
+    final citiesRef = db.collection("cities");
+    final notCapitals = citiesRef.where("capital", isNotEqualTo: true);
+    // [END perform_simple_and_compound_queries_not_equal]
+  }
+
+  void performSimpleAndCompoundQueries_arrayMembership() {
+    // [START perform_simple_and_compound_queries_array_membership]
+    final citiesRef = db.collection("cities");
+    final westCoastcities =
+        citiesRef.where("regions", arrayContains: "west_coast");
+    // [END perform_simple_and_compound_queries_array_membership]
+  }
+
+  void performSimpleAndCompoundQueries_inNotInArrayContainsAny() {
+    // [START perform_simple_and_compound_queries_in_not_in_array_contains_any]
+    final citiesRef = db.collection("cities");
+    final cities = citiesRef.where("regions", whereIn: ["USA", "Japan"]);
+    // [END perform_simple_and_compound_queries_in_not_in_array_contains_any]
+  }
+
+  void performSimpleAndCompoundQueries_notIn() {
+    // [START perform_simple_and_compound_queries_not_in]
+    final citiesRef = db.collection("cities");
+    final cities = citiesRef.where("regions", whereNotIn: ["USA", "Japan"]);
+    // [END perform_simple_and_compound_queries_not_in]
+  }
+
+  void performSimpleAndCompoundQueries_arrayContainsAny() {
+    // [START perform_simple_and_compound_queries_array_contains_any]
+    final citiesRef = db.collection("cities");
+    final cities = citiesRef
+        .where("regions", arrayContainsAny: ["west_coast", "east_coast"]);
+    // [END perform_simple_and_compound_queries_array_contains_any]
+  }
+
+  void performSimpleAndCompoundQueries_compoundQueries() {
+    // [START perform_simple_and_compound_queries_compound_queries]
+    final citiesRef = db.collection("cities");
+    citiesRef
+        .where("state", isEqualTo: "CO")
+        .where("name", isEqualTo: "Denver");
+    citiesRef
+        .where("state", isEqualTo: "CA")
+        .where("population", isLessThan: 1000000);
+    // [END perform_simple_and_compound_queries_compound_queries]
+  }
+
+  // TODO: remember to document this naming convention in README
+  void performSimpleAndCompoundQueries_compoundQueries_validRangeFilters() {
+    // [START perform_simple_and_compound_queries_compound_queries_valid_range_filters]
+    final citiesRef = db.collection("cities");
+    citiesRef
+        .where("state", isGreaterThanOrEqualTo: "CA")
+        .where("state", isLessThanOrEqualTo: "IN");
+    citiesRef
+        .where("state", isEqualTo: "CA")
+        .where("population", isGreaterThan: 1000000);
+    // [END perform_simple_and_compound_queries_compound_queries_valid_range_filters]
+  }
+
+  void performSimpleAndCompoundQueries_compoundQueries_invalidRangeFilters() {
+    // [START perform_simple_and_compound_queries_compound_queries_invalid_range_filters]
+    final citiesRef = db.collection("cities");
+    citiesRef
+        .where("state", isGreaterThanOrEqualTo: "CA")
+        .where("population", isGreaterThan: 1000000);
+    // [END perform_simple_and_compound_queries_compound_queries_invalid_range_filters]
+  }
+
+  void performSimpleAndCompoundQueries_collectionGroups() {
+    // [START perform_simple_and_compound_queries_collection_groups]
+    final citiesRef = db.collection("cities");
+
+    final ggbData = {"name": "Golden Gate Bridge", "type": "bridge"};
+    citiesRef.doc("SF").collection("landmarks").add(ggbData);
+
+    final lohData = {"name": "Legion of Honor", "type": "museum"};
+    citiesRef.doc("SF").collection("landmarks").add(lohData);
+
+    final gpData = {"name": "Griffth Park", "type": "park"};
+    citiesRef.doc("LA").collection("landmarks").add(gpData);
+
+    final tgData = {"name": "The Getty", "type": "museum"};
+    citiesRef.doc("LA").collection("landmarks").add(tgData);
+
+    final lmData = {"name": "Lincoln Memorial", "type": "memorial"};
+    citiesRef.doc("DC").collection("landmarks").add(lmData);
+
+    final nasaData = {
+      "name": "National Air and Space Museum",
+      "type": "museum"
+    };
+    citiesRef.doc("DC").collection("landmarks").add(nasaData);
+
+    final upData = {"name": "Ueno Park", "type": "park"};
+    citiesRef.doc("TOK").collection("landmarks").add(upData);
+
+    final nmData = {
+      "name": "National Musuem of Nature and Science",
+      "type": "museum"
+    };
+    citiesRef.doc("TOK").collection("landmarks").add(nmData);
+
+    final jpData = {"name": "Jingshan Park", "type": "park"};
+    citiesRef.doc("BJ").collection("landmarks").add(jpData);
+
+    final baoData = {"name": "Beijing Ancient Observatory", "type": "musuem"};
+    citiesRef.doc("BJ").collection("landmarks").add(baoData);
+    // [END perform_simple_and_compound_queries_collection_groups]
+  }
+
+  void performSimpleAndCompoundQueries_collectionGroups2() {
+    // [START perform_simple_and_compound_queries_collection_groups2]
+    db
+        .collectionGroup("landmarks")
+        .where("type", isEqualTo: "museum")
+        .get()
+        .then(
+          (res) => print("Successfully completed"),
+          onError: (e) => print("Error completing: $e"),
+        );
+    // [END perform_simple_and_compound_queries_collection_groups2]
+  }
+
+  void orderAndLimitData_orderAndLimitData() {
+    // [START order_and_limit_data_order_and_limit_data]
+    final citiesRef = db.collection("cities");
+    citiesRef.orderBy("name").limit(3);
+    // [END order_and_limit_data_order_and_limit_data]
+  }
+
+  void orderAndLimitData_orderAndLimitData2() {
+    // [START order_and_limit_data_order_and_limit_data2]
+    final citiesRef = db.collection("cities");
+    citiesRef.orderBy("name", descending: true).limit(3);
+    // [END order_and_limit_data_order_and_limit_data2]
+  }
+
+  void orderAndLimitData_orderAndLimitData3() {
+    // [START order_and_limit_data_order_and_limit_data3]
+    final citiesRef = db.collection("cities");
+    citiesRef.orderBy("state").orderBy("population", descending: true);
+    // [END order_and_limit_data_order_and_limit_data3]
+  }
+
+  void orderAndLimitData_orderAndLimitData4() {
+    // [START order_and_limit_data_order_and_limit_data4]
+    final citiesRef = db.collection("cities");
+    citiesRef
+        .where("population", isGreaterThan: 100000)
+        .orderBy("population")
+        .limit(2);
+    // [END order_and_limit_data_order_and_limit_data4]
+  }
+
+  void orderAndLimitData_limitations_valid() {
+    // [START order_and_limit_data_limitations_valid]
+    final citiesRef = db.collection("cities");
+    citiesRef.where("population", isGreaterThan: 100000).orderBy("population");
+    // [END order_and_limit_data_limitations_valid]
+  }
+
+  void orderAndLimitData_limitations_invalid() {
+    // [START order_and_limit_data_limitations_invalid]
+    final citiesRef = db.collection("cities");
+    citiesRef.where("population", isGreaterThan: 100000).orderBy("country");
+    // [END order_and_limit_data_limitations_invalid]
+  }
+
+  void paginateData_addASimpleCursor() {
+    // [START paginate_data_add_a_simple_cursor]
+    db.collection("cities").orderBy("population").startAt([1000000]);
+    // [END paginate_data_add_a_simple_cursor]
+  }
+
+  void paginateData_addASimpleCursor2() {
+    // [START paginate_data_add_a_simple_cursor2]
+    db.collection("cities").orderBy("population").startAt([1000000]);
+    // [END paginate_data_add_a_simple_cursor2]
+  }
+
+  void paginateData_useADocSnapshotToDefineCursorQuery() {
+    // [START paginate_data_use_a_doc_snapshot_to_define_cursor_query]
+    db.collection("cities").doc("SF").get().then(
+      (documentSnapshot) {
+        final biggerThanSf = db
+            .collection("cities")
+            .orderBy("population")
+            .startAt([documentSnapshot]);
+      },
+      onError: (e) => print("Error: $e"),
+    );
+    // [END paginate_data_use_a_doc_snapshot_to_define_cursor_query]
+  }
+
+  void paginateData_paginateAQuery() {
+    // [START paginate_data_paginate_a_query]
+    // Construct query for first 25 cities, ordered by population
+    final first = db.collection("cities").orderBy("population").limit(25);
+
+    first.get().then(
+      (documentSnapshots) {
+        // Get the last visible document
+        final lastVisible = documentSnapshots.docs[documentSnapshots.size - 1];
+
+        // Construct a new query starting at this document,
+        // get the next 25 cities.
+        final next = db
+            .collection("cities")
+            .orderBy("population")
+            .startAfter([lastVisible]).limit(25);
+
+        // Use the query for pagination
+        // ...
+      },
+      onError: (e) => print("Error completing: $e"),
+    );
+    // [END paginate_data_paginate_a_query]
+  }
+
+  void paginateData_setCursorBasedOnMultipleFields() {
+    // [START paginate_data_set_cursor_based_on_multiple_fields]
+    // Will return all Springfields
+    db
+        .collection("cities")
+        .orderBy("name")
+        .orderBy("state")
+        .startAt(["Springfield"]);
+
+    // Will return "Springfield, Missouri" and "Springfield, Wisconsin"
+    db
+        .collection("cities")
+        .orderBy("name")
+        .orderBy("state")
+        .startAt(["Springfield", "Missouri"]);
+    // [END paginate_data_set_cursor_based_on_multiple_fields]
+  }
+
+  void accessDataOffline_listenToOfflineData() {
+    // [START access_data_offline_listen_to_offline_data]
+    db
+        .collection("cities")
+        .where("state", isEqualTo: "CA")
+        .snapshots(includeMetadataChanges: true)
+        .listen((querySnapshot) {
+      for (var change in querySnapshot.docChanges) {
+        if (change.type == DocumentChangeType.added) {
+          final source =
+              (querySnapshot.metadata.isFromCache) ? "local cache" : "server";
+
+          print("Data fetched from $source}");
+        }
+      }
+    });
+    // [END access_data_offline_listen_to_offline_data]
+  }
+
+  void accessDataOffline_disableNetwork() {
+    // [START access_data_offline_disable_network]
+    db.disableNetwork().then((_) {
+      // Do offline things
+    });
+    // [END access_data_offline_disable_network]
+  }
+
+  void accessDataOffline_enableNetwork() {
+    // [START access_data_offline_enable_network]
+    db.disableNetwork().then((_) {
+      // Do offline things
+    });
+    // [END access_data_offline_enable_network]
   }
 }
