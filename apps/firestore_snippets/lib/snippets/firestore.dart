@@ -1,7 +1,10 @@
 // ignore_for_file: non_constant_identifier_names, avoid_print
 
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firestore_snippets/snippets/custom_snippets/firestore_add_data_custom_objects_snippet.dart';
+import 'package:firestore_snippets/snippets/custom_snippets/restaurant.dart';
 import 'package:firestore_snippets/snippets/snippet.dart';
 
 class FirestoreSnippets extends DocSnippet implements Firestore {
@@ -931,4 +934,133 @@ batch.commit().then(() => {
     });
     // [END access_data_offline_enable_network]
   }
+
+  void solutions_aggregationQueries() {
+    // [START solutions_aggregation_queries]
+    db
+        .collection("restaurants")
+        .doc("arinell-pizza")
+        .collection("ratings")
+        .get();
+    // [END solutions_aggregation_queries]
+  }
+
+  void solutions_aggregationQueries2() {
+    // [START solutions_aggregation_queries_2]
+    final arinellDoc = {
+      'name': 'Arinell Pizza',
+      'avgRating': 4.65,
+      'numRatings': 683
+    };
+    // [END solutions_aggregation_queries_2]
+  }
+
+  void solutions_aggregationQueries3() {
+    // [START solutions_aggregation_queries_3]
+    void addRating(DocumentReference restaurantRef, double rating) async {
+      // Create reference for new rating, for use inside the transaction
+      final ratingRef = restaurantRef.collection("ratings").doc();
+
+      // In a transaction, add the new rating and update the aggregate totals
+      return db.runTransaction((transaction) async {
+        final restaurant = await transaction.get(restaurantRef).then((snap) {
+          final data = snap.data() as Map<String, dynamic>;
+          return Restaurant.fromFirestore(data);
+        });
+
+        // Compute new number of ratings
+        final newNumRatings = restaurant.numRatings + 1;
+
+        // Compute new average rating
+        final oldRatingTotal = restaurant.avgRating * restaurant.numRatings;
+        final newAvgRating = (oldRatingTotal + rating) / newNumRatings;
+
+        // Set new restaurant info
+        restaurant.numRatings = newNumRatings;
+        restaurant.avgRating = newAvgRating;
+
+        // Update restaurant
+        transaction.set(restaurantRef, restaurant);
+
+        // Update rating
+        final data = {
+          "rating": rating,
+        };
+
+        transaction.set(ratingRef, data, SetOptions(merge: true));
+      });
+    }
+
+    // [END solutions_aggregation_queries_3]
+    final docRef = db.collection("restaurants").doc("arinell-pizza");
+    addRating(docRef, 2.3);
+  }
+
+  void solutions_distributedCounters2() {
+    // [START solutions_distributed_counters2]
+    void createCounter(DocumentReference ref, int numShards) {
+      final batch = db.batch();
+      // Initialize the counter document
+      batch.set(ref, Counter(numShards));
+
+      // Initialize each shard with count=0
+      ref.set(Counter(numShards)).then((value) {
+        for (var i = 0; i < numShards; ++i) {
+          final shardRef = ref.collection('shards').doc(i.toString());
+          batch.set(shardRef, Shard(0));
+        }
+      });
+
+      // Commit the write batch
+      batch.commit();
+    }
+    // [END solutions_distributed_counters2]
+  }
+
+  void solutions_distributedCounters3() {
+    // [START solutions_distributed_counters3]
+    void incrementCounter(db, ref, numShards) {
+      // Select a shard of the counter at random
+      final randomShardId = Random().nextInt(numShards);
+      final shardId = (randomShardId * numShards).floor().toString();
+      final shardRef = ref.collection('shards').doc(shardId);
+
+      // Update count
+      shardRef.update("count", FieldValue.increment(1));
+    }
+    // [END solutions_distributed_counters3]
+  }
+
+  // todo: this needs to be cleaned up vis a vis types
+  void solutions_distributedCounters4() {
+    // [START solutions_distributed_counters4]
+    getCount(DocumentReference ref) {
+      // Select a shard of the counter at random
+      return ref.collection('shards').get().then(
+        (snapshot) {
+          num totalCount = 0;
+          for (var doc in snapshot.docs) {
+            totalCount += (doc.data as Map<String, dynamic>)["count"] as int;
+          }
+          return totalCount;
+        },
+        onError: (e) => print("Error completing: $e"),
+      );
+    }
+    // [END solutions_distributed_counters4]
+  }
 }
+
+// [START solutions_distributed_counters]
+class Counter {
+  int numShards;
+
+  Counter(this.numShards);
+}
+
+class Shard {
+  int count;
+
+  Shard(this.count);
+}
+// [END solutions_distributed_counters]
