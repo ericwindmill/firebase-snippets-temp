@@ -327,4 +327,237 @@ batch.commit().then(() => {
     });
     // [END transactions_batched_writes]
   }
+
+  void deleteData_deleteDocs() {
+    // [START delete_data_delete_docs]
+    db.collection("cities").doc("DC").delete().then(
+          (doc) => print("Document deleted"),
+          onError: (e) => print("Error updating document $e"),
+        );
+    // [END delete_data_delete_docs]
+  }
+
+  void deleteData_deleteFields() {
+    // [START delete_data_delete_fields]
+    final docRef = db.collection("cities").doc("BJ");
+
+    // Remove the 'capital' field from the document
+    final updates = <String, dynamic>{
+      "capital": FieldValue.delete(),
+    };
+
+    docRef.update(updates);
+    // [END delete_data_delete_fields]
+  }
+
+  void getDataOnce_exampleData() {
+    // [START get_data_once_example_data]
+    final cities = db.collection("cities");
+    final data1 = <String, dynamic>{
+      "name": "San Francisco",
+      "state": "CA",
+      "country": "USA",
+      "capital": false,
+      "population": 860000,
+      "regions": ["west_coast", "norcal"]
+    };
+    cities.doc("SF").set(data1);
+
+    final data2 = <String, dynamic>{
+      "name": "Los Angeles",
+      "state": "CA",
+      "country": "USA",
+      "capital": false,
+      "population": 3900000,
+      "regions": ["west_coast", "socal"],
+    };
+    cities.doc("LA").set(data2);
+
+    final data3 = <String, dynamic>{
+      "name": "Washington D.C.",
+      "state": null,
+      "country": "USA",
+      "capital": true,
+      "population": 680000,
+      "regions": ["east_coast"]
+    };
+    cities.doc("DC").set(data3);
+
+    final data4 = <String, dynamic>{
+      "name": "Tokyo",
+      "state": null,
+      "country": "Japan",
+      "capital": true,
+      "population": 9000000,
+      "regions": ["kanto", "honshu"]
+    };
+    cities.doc("TOK").set(data4);
+
+    final data5 = <String, dynamic>{
+      "name": "Beijing",
+      "state": null,
+      "country": "China",
+      "capital": true,
+      "population": 21500000,
+      "regions": ["jingjinji", "hebei"],
+    };
+    cities.doc("BJ").set(data5);
+    // [END get_data_once_example_data]
+  }
+
+  void getDataOnce_getADocument() {
+    // [START get_data_once_get_a_document]
+    final docRef = db.collection("cities").doc("SF");
+    docRef.get().then(
+          (res) => print("Successfully completed"),
+          onError: (e) => print("Error completing: $e"),
+        );
+    // [END get_data_once_get_a_document]
+  }
+
+  void getDataOnce_sourceOptions() {
+    // [START get_data_once_source_options]
+    final docRef = db.collection("cities").doc("SF");
+
+    // Source can be CACHE, SERVER, or DEFAULT.
+    const source = Source.cache;
+
+    docRef.get(const GetOptions(source: source)).then(
+          (res) => print("Successfully completed"),
+          onError: (e) => print("Error completing: $e"),
+        );
+    // [END get_data_once_source_options]
+  }
+
+  void getDataOnce_customObjects() {
+    // [START get_data_once_custom_objects]
+    // TODO: should this be included?
+    // This isn't really specific to Firestore, it's just serdes
+    final docRef = db.collection("cities").doc("BJ");
+    docRef.get().then((documentSnapshot) {
+      final data = documentSnapshot.data() as Map<String, dynamic>;
+      final city = City(
+        name: data['name'],
+      );
+    });
+    // [END get_data_once_custom_objects]
+  }
+
+  void getDataOnce_multipleDocumentsFromACollection() {
+    // [START get_data_once_multiple_documents_from_a_collection]
+    db.collection("cities").where("capital", isEqualTo: true).get().then(
+          (res) => print("Successfully completed"),
+          onError: (e) => print("Error completing: $e"),
+        );
+    // [END get_data_once_multiple_documents_from_a_collection]
+  }
+
+  void getDataOnce_getAllDocumentsInACollection() {
+    // [START get_data_once_get_all_documents_in_a_collection]
+    db.collection("cities").get().then(
+          (res) => print("Successfully completed"),
+          onError: (e) => print("Error completing: $e"),
+        );
+    // [END get_data_once_get_all_documents_in_a_collection]
+  }
+
+  void getDataOnce_listSubCollections() {
+    // [START get_data_once_list_sub_collections]
+    // Not currently available in Dart SDK
+    // [END get_data_once_list_sub_collections]
+  }
+
+  void listenToRealtimeUpdates_listenForUpdates() {
+    // [START listen_to_realtime_updates_listen_for_updates]
+    final docRef = db.collection("cities").doc("SF");
+    docRef.snapshots().listen(
+          (event) => print("current data: ${event.data()}"),
+          onError: (error) => print("Listen failed: $error"),
+        );
+
+    // [END listen_to_realtime_updates_listen_for_updates]
+  }
+
+  void listenToRealtimeUpdates_eventsForLocalChanges() {
+    // [START listen_to_realtime_updates_events_for_local_changes]
+    final docRef = db.collection("cities").doc("SF");
+    docRef.snapshots().listen(
+      (event) {
+        final source = (event.metadata.hasPendingWrites) ? "Local" : "Server";
+        print("$source data: ${event.data()}");
+      },
+      onError: (error) => print("Listen failed: $error"),
+    );
+
+    // [END listen_to_realtime_updates_events_for_local_changes]
+  }
+
+  void listenToRealtimeUpdates_eventsOnMetadataChanges() {
+    // [START listen_to_realtime_updates_events_on_metadata_changes]
+    final docRef = db.collection("cities").doc("SF");
+    docRef.snapshots(includeMetadataChanges: true).listen((event) {
+      // ...
+    });
+    // [END listen_to_realtime_updates_events_on_metadata_changes]
+  }
+
+  void listenToRealtimeUpdates_listToMultipleDocuments() {
+    // [START listen_to_realtime_updates_list_to_multiple_documents]
+    db
+        .collection("Cities")
+        .where("state", isEqualTo: "CA")
+        .snapshots()
+        .listen((event) {
+      final cities = [];
+      for (var doc in event.docs) {
+        cities.add(doc.data()["name"]);
+      }
+      print("Cities in CA: ${cities.join(", ")}");
+    });
+    // [END listen_to_realtime_updates_list_to_multiple_documents]
+  }
+
+  void listenToRealtimeUpdates_viewUpdatesBetweenChanges() {
+    // [START listen_to_realtime_updates_view_updates_between_changes]
+    db
+        .collection("Cities")
+        .where("state", isEqualTo: "CA")
+        .snapshots()
+        .listen((event) {
+      for (var change in event.docChanges) {
+        switch (change.type) {
+          case DocumentChangeType.added:
+            print("New City: ${change.doc.data()}");
+            break;
+          case DocumentChangeType.modified:
+            print("Modified City: ${change.doc.data()}");
+            break;
+          case DocumentChangeType.removed:
+            print("Removed City: ${change.doc.data()}");
+            break;
+        }
+      }
+    });
+    // [END listen_to_realtime_updates_view_updates_between_changes]
+  }
+
+  void listenToRealtimeUpdates_detachAListener() {
+    // [START listen_to_realtime_updates_detach_a_listener]
+    final collection = db.collection("cities");
+    final listener = collection.snapshots().listen((event) {
+      // ...
+    });
+    listener.cancel();
+    // [END listen_to_realtime_updates_detach_a_listener]
+  }
+
+  void listenToRealtimeUpdates_handleListenErrors() {
+    // [START listen_to_realtime_updates_handle_listen_errors]
+    final docRef = db.collection("cities");
+    docRef.snapshots().listen(
+          (event) => print("listener attached"),
+          onError: (error) => print("Listen failed: $error"),
+        );
+    // [END listen_to_realtime_updates_handle_listen_errors]
+  }
 }
