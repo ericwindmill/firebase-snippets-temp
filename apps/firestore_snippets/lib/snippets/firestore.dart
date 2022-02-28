@@ -1049,6 +1049,15 @@ batch.commit().then(() => {
     }
     // [END solutions_distributed_counters4]
   }
+
+  // todo: Firebase functions aren't supported in Dart
+  void deleteDataWithCallableCloudFunc_clientInvocation() {
+    // [START delete_data_with_callable_cloud_func_client_invocation]
+    /*
+
+   */
+    // [END delete_data_with_callable_cloud_func_client_invocation]
+  }
 }
 
 // [START solutions_distributed_counters]
