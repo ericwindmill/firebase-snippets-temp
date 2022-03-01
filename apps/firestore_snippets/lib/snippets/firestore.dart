@@ -1063,13 +1063,11 @@ batch.commit().then(() => {
 // [START solutions_distributed_counters]
 class Counter {
   int numShards;
-
   Counter(this.numShards);
 }
 
 class Shard {
   int count;
-
   Shard(this.count);
 }
 // [END solutions_distributed_counters]
