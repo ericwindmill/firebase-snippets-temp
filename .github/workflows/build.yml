@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: 'Run tests'
-      uses: subosito/flutter-action@v2
+      uses: subosito/flutter-action@v2.3.0
       with:
         channel: 'stable'
     - run: make test
@@ -19,7 +19,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: 'Build app'
-      uses: subsito/flutter-action@v2
+      uses: subsito/flutter-action@v2.3.0
       with:
         channel: 'stable'
     - run: make build
