@@ -28,7 +28,11 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Container(),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Snippet Test'),
+        ),
+      ),
     );
   }
 }

@@ -14,7 +14,13 @@ class FirestoreSnippets extends DocSnippet implements Firestore {
   FirestoreSnippets(this.db);
 
   @override
-  void runAll() {}
+  void runAll() {
+    getStarted_addData();
+    getStarted_addData2();
+    getStarted_readData();
+    dataModel_references();
+    dataModel_subCollections();
+  }
 
   void getStarted_addData() async {
     // [START get_started_add_data_1]
