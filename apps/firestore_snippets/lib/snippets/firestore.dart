@@ -14,12 +14,87 @@ class FirestoreSnippets extends DocSnippet implements Firestore {
   FirestoreSnippets(this.db);
 
   @override
-  void runAll() {
-    getStarted_addData();
-    getStarted_addData2();
-    getStarted_readData();
-    dataModel_references();
-    dataModel_subCollections();
+  bool runAll() {
+    try {
+      getStarted_addData();
+      getStarted_addData2();
+      getStarted_readData();
+      dataModel_references();
+      dataModel_subCollections();
+      dataBundles_loadingClientBundles();
+      addData_setADocument();
+      addData_setADocument2();
+      addData_dataTypes();
+      addData_customObjects();
+      addData_customObjects2();
+      addData_addADocument();
+      addData_addADocument2();
+      addData_addADocument3();
+      addData_updateADocument();
+      addData_serverTimestamp();
+      addData_updateFieldsInNestedObjects();
+      addData_updateElementsInArray();
+      addData_incrementANumericValue();
+      transactions_updatingDataWithTransactions();
+      transactions_passingInformationOutOfTransactions();
+      transactions_batchedWrites();
+      deleteData_deleteDocs();
+      deleteData_deleteFields();
+      getDataOnce_exampleData();
+      getDataOnce_getADocument();
+      getDataOnce_sourceOptions();
+      getDataOnce_customObjects();
+      getDataOnce_multipleDocumentsFromACollection();
+      getDataOnce_getAllDocumentsInACollection();
+      getDataOnce_listSubCollections();
+      listenToRealtimeUpdates_listenForUpdates();
+      listenToRealtimeUpdates_eventsForLocalChanges();
+      listenToRealtimeUpdates_eventsOnMetadataChanges();
+      listenToRealtimeUpdates_listToMultipleDocuments();
+      listenToRealtimeUpdates_viewUpdatesBetweenChanges();
+      listenToRealtimeUpdates_detachAListener();
+      listenToRealtimeUpdates_handleListenErrors();
+      performSimpleAndCompoundQueries_exampleData();
+      performSimpleAndCompoundQueries_simpleQueries();
+      performSimpleAndCompoundQueries_simpleQueries2();
+      performSimpleAndCompoundQueries_executeAQuery();
+      performSimpleAndCompoundQueries_queryOperators();
+      performSimpleAndCompoundQueries_notEqual();
+      performSimpleAndCompoundQueries_arrayMembership();
+      performSimpleAndCompoundQueries_inNotInArrayContainsAny();
+      performSimpleAndCompoundQueries_notIn();
+      performSimpleAndCompoundQueries_arrayContainsAny();
+      performSimpleAndCompoundQueries_compoundQueries();
+      performSimpleAndCompoundQueries_compoundQueries_validRangeFilters();
+      performSimpleAndCompoundQueries_compoundQueries_invalidRangeFilters();
+      performSimpleAndCompoundQueries_collectionGroups();
+      performSimpleAndCompoundQueries_collectionGroups2();
+      orderAndLimitData_orderAndLimitData();
+      orderAndLimitData_orderAndLimitData2();
+      orderAndLimitData_orderAndLimitData3();
+      orderAndLimitData_orderAndLimitData4();
+      orderAndLimitData_limitations_valid();
+      orderAndLimitData_limitations_invalid();
+      paginateData_addASimpleCursor();
+      paginateData_addASimpleCursor2();
+      paginateData_useADocSnapshotToDefineCursorQuery();
+      paginateData_paginateAQuery();
+      paginateData_setCursorBasedOnMultipleFields();
+      accessDataOffline_listenToOfflineData();
+      accessDataOffline_disableNetwork();
+      accessDataOffline_enableNetwork();
+      solutions_aggregationQueries();
+      solutions_aggregationQueries2();
+      solutions_aggregationQueries3();
+      solutions_distributedCounters2();
+      solutions_distributedCounters3();
+      solutions_distributedCounters4();
+      deleteDataWithCallableCloudFunc_clientInvocation();
+      return true;
+    } catch (e) {
+      print('oh no.... $e');
+      return false;
+    }
   }
 
   void getStarted_addData() async {
@@ -303,18 +378,6 @@ class FirestoreSnippets extends DocSnippet implements Firestore {
 
   void transactions_batchedWrites() {
     // [START transactions_batched_writes]
-    /*
-
-
-
-
-
-
-// Commit the batch
-batch.commit().then(() => {
-    // ...
-});
-   */
     // Get a new write batch
     final batch = db.batch();
 

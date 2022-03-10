@@ -44,7 +44,7 @@ void main() async {
   // [START access_data_offline_configure_offline_persistence]
   final updatedSettings =
       db.settings.copyWith(cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
-  db.settings = settings;
+  db.settings = updatedSettings;
   // [END access_data_offline_configure_offline_persistence]
 
   if (!kReleaseMode) db.useFirestoreEmulator('localhost', 8080);

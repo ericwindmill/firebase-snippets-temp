@@ -1,22 +1,17 @@
-name: flutter
+name: snippets test
 
 on:
 - pull_request
 - push
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: 'Install Flutter'
-      uses: subosito/flutter-action@v2
-    - run: make test
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: 'Build app'
-      uses: subosito/flutter-action@v2
-    - run: make build
-      # todo: install firebase and run emulator
+    - uses: subsito/flutter-action@v2.3.0
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12'
+    - run: npm install -g firebase-tools
+    - run: firebase emulators:exec \"make build\"
