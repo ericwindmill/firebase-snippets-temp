@@ -1,9 +1,7 @@
 name: ci
 
 on:
-  pull_request:
-    paths-ignore:
-    - "**.md"
+ - pull_request
 
 jobs:
   build:
