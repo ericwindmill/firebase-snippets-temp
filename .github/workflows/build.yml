@@ -26,7 +26,7 @@ jobs:
         key: firebase-emulators-v1-${{ github.run_id }}
         restore-keys: firebase-emulators-v1
     - name: "Start Firebase Emulator"
-      run: cd ./.github/workflows/scripts && ./start-firebase-emulator.sh
+      run: cd ./.github/scripts && ./start-firebase-emulator.sh
     - name: "Run application"
       working-directory: tests
       run: |
