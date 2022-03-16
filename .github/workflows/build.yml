@@ -17,7 +17,7 @@ jobs:
         node-version: '16'
     - name: "Install Tools"
       run: |
-        flutter config --no-enable-android --no-enable-ios --no-enable-macos-desktop
+        flutter config --no-enable-web --no-enable-ios --no-enable-macos-desktop
         sudo npm i -g firebase-tools
     - name: "Firebase Emulator Cache"
       uses: actions/cache@v2
@@ -25,10 +25,22 @@ jobs:
         path: ~/.cache/firebase/emulators
         key: firebase-emulators-v1-${{ github.run_id }}
         restore-keys: firebase-emulators-v1
-    - name: "Start Firebase Emulator"
-      run: firebase emulators:exec --only firestore
-    - name: "Run application"
-      working-directory: tests
+    - name: "Build Application"
+      working-directory: apps/firestore_snippets
       run: |
-        chromedriver --port=4444 &
-        flutter drive --verbose-system-logs --device-id=web-server --target=./test_driver/driver_e2e.dart --dart-define=CI=true
+        flutter build apk --debug --dart-define=CI=true --no-android-gradle-daemon
+    - name: "Start Firebase Emulator"
+      run: firebase emulators:start --only firestore
+    - name: "Run application"
+      uses: reactivecircus/android-emulator-runner@v2.21.0
+      timeout-minutes: 30
+      with:
+        api-level: 30
+        arch: x86_64
+        target: google_apis
+        profile: Nexus 5X
+        working-directory: tests
+        script: |
+          sleep 15
+          flutter run --dart-define=CI=true
+
