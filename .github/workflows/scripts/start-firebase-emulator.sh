@@ -35,7 +35,7 @@ if [[ ! -d "functions/node_modules" ]]; then
 fi
 
 export STORAGE_EMULATOR_DEBUG=true
-EMU_START_COMMAND="firebase emulators:start --only firestore"
+EMU_START_COMMAND="firebase emulators:start --only auth,firestore,functions,storage,database --project flutterfire-e2e-tests"
 
 MAX_RETRIES=3
 MAX_CHECKATTEMPTS=60
