@@ -4,81 +4,84 @@ on:
  - pull_request
  - push
 
-env:
-  FLUTTERFIRE_PLUGIN_SCOPE: "*cloud_firestore*"
-  FLUTTERFIRE_PLUGIN_SCOPE_EXAMPLE: "*cloud_firestore_example*"
-
-jobs:
-  android:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-    - uses: subosito/flutter-action@v2.3.0
-    - uses: actions/checkout@v2.3.4
-      with:
-        fetch-depth: 0
-    - uses: actions/setup-java@v2
-      with:
-        distribution: 'temurin'
-        java-version: '11'
-    - name: "Install Flutter"
-      run: cd ./.github/workflows/scripts && install-flutter.sh stable
-    - name: "Install Tools"
-      run: |
-        sudo ./.github/workflows/scripts/install-tools.sh
-        sudo npm i -g firebase-tools
-    - name: "Build Example"
-      run: sudo ./.github/workflows/scripts/build-example.sh android
-    - name: Start Firebase Emulator
-      run: cd ./.github/workflows/scripts && sudo ./start-firebase-emulator.sh
-    - name: "Drive Example"
-      uses: reactivecircus/android-emulator-runner@v2
-      with:
-        api-level: 28
-        arch: x86_64
-        # Firebase Firestore works without Google Play Services, so we don't use the `googleapis`
-        # emulator target as it's considerably slower on CI.
-        target: default
-        profile: Nexus 5X
-        script: ./.github/workflows/scripts/drive-example.sh android
-
-
-#  build:
-#    runs-on: ubuntu-latest
-#    steps:
+#env:
+#  FLUTTERFIRE_PLUGIN_SCOPE: "*cloud_firestore*"
+#  FLUTTERFIRE_PLUGIN_SCOPE_EXAMPLE: "*cloud_firestore_example*"
 #
-#    # setup environment
-#    - uses: actions/checkout@v2
-
-#    - uses: actions/setup-node@v2
+#jobs:
+#  android:
+#    runs-on: ubuntu-latest
+#    timeout-minutes: 30
+#    steps:
+#    - uses: subosito/flutter-action@v2.3.0
+#    - uses: actions/checkout@v2.3.4
 #      with:
-#        node-version: '16'
+#        fetch-depth: 0
+#    - uses: actions/setup-java@v2
+#      with:
+#        distribution: 'temurin'
+#        java-version: '11'
+#    - name: "Install Flutter"
+#      run: cd ./.github/workflows/scripts && install-flutter.sh stable
 #    - name: "Install Tools"
 #      run: |
-#        flutter config --no-enable-web --no-enable-ios --no-enable-macos-desktop
+#        sudo ./.github/workflows/scripts/install-tools.sh
 #        sudo npm i -g firebase-tools
-#    - name: "Firebase Emulator Cache"
-#      uses: actions/cache@v2
+#    - name: "Build Example"
+#      run: sudo ./.github/workflows/scripts/build-example.sh android
+#    - name: Start Firebase Emulator
+#      run: cd ./.github/workflows/scripts && sudo ./start-firebase-emulator.sh
+#    - name: "Drive Example"
+#      uses: reactivecircus/android-emulator-runner@v2
 #      with:
-#        path: ~/.cache/firebase/emulators
-#        key: firebase-emulators-v1-${{ github.run_id }}
-#        restore-keys: firebase-emulators-v1
-#    - name: "Build Application"
-#      working-directory: apps/firestore_snippets
-#      run: |
-#        flutter build apk --multidex --debug --dart-define=CI=true --no-android-gradle-daemon
-#    - name: "Start Firebase Emulator"
-#      run: firebase emulators:start --only firestore
-#    - name: "Run application"
-#      uses: reactivecircus/android-emulator-runner@v2.21.0
-#      timeout-minutes: 30
-#      with:
-#        api-level: 30
+#        api-level: 28
 #        arch: x86_64
-#        target: google_apis
+#        # Firebase Firestore works without Google Play Services, so we don't use the `googleapis`
+#        # emulator target as it's considerably slower on CI.
+#        target: default
 #        profile: Nexus 5X
-#        working-directory: tests
-#        script: |
-#          sleep 15
-#          flutter run --dart-define=CI=true
+#        script: ./.github/workflows/scripts/drive-example.sh android
+
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: subosito/flutter-action@v2.3.0
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+    - uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+    - name: "Install Tools"
+      run: |
+        flutter config --no-enable-web --no-enable-ios --no-enable-macos-desktop
+        sudo npm i -g firebase-tools
+    - name: "Firebase Emulator Cache"
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/firebase/emulators
+        key: firebase-emulators-v1-${{ github.run_id }}
+        restore-keys: firebase-emulators-v1
+    - name: "Start Firebase Emulator"
+      run: firebase emulators:start --only firestore
+      working-directory: apps/firestore_snippets
+    - name: "Build Application"
+      working-directory: apps/firestore_snippets
+      run: |
+        flutter build appbundle --multidex --debug --dart-define=CI=true --no-android-gradle-daemon
+    - name: "Run application"
+      uses: reactivecircus/android-emulator-runner@v2.21.0
+      timeout-minutes: 30
+      with:
+        api-level: 30
+        arch: x86_64
+        target: google_apis
+        profile: Nexus 5X
+        working-directory: tests
+        script: |
+          sleep 15
+          flutter run --dart-define=CI=true
 
