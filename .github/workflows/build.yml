@@ -28,7 +28,7 @@ jobs:
     - name: "Build Application"
       working-directory: apps/firestore_snippets
       run: |
-        flutter build apk --debug --dart-define=CI=true --no-android-gradle-daemon
+        flutter build apk --multidex --debug --dart-define=CI=true --no-android-gradle-daemon
     - name: "Start Firebase Emulator"
       run: firebase emulators:start --only firestore
     - name: "Run application"
