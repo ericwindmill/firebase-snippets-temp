@@ -22,7 +22,7 @@ jobs:
         distribution: 'temurin'
         java-version: '11'
     - name: "Install Flutter"
-      run: sudo .github/workflows/scripts/install-flutter.sh stable
+      run: cd ./.github/workflows/scripts && install-flutter.sh stable
     - name: "Install Tools"
       run: |
         sudo ./.github/workflows/scripts/install-tools.sh
