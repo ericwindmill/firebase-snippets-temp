@@ -27,23 +27,24 @@ jobs:
         path: ~/.cache/firebase/emulators
         key: firebase-emulators-v1-${{ github.run_id }}
         restore-keys: firebase-emulators-v1
-    - name: "Start Firebase Emulator"
-      run: firebase emulators:start --only firestore
-      working-directory: apps/firestore_snippets
-    - name: "Build Application"
-      working-directory: apps/firestore_snippets
-      run: |
-        flutter build appbundle --multidex --debug --dart-define=CI=true --no-android-gradle-daemon
     - name: "Run application"
-      uses: reactivecircus/android-emulator-runner@v2.21.0
-      timeout-minutes: 30
-      with:
-        api-level: 30
-        arch: x86_64
-        target: google_apis
-        profile: Nexus 5X
-        working-directory: tests
-        script: |
-          sleep 15
-          flutter run --dart-define=CI=true
+      run: |
+        git update-index --chmod=+x .github/workflows/scripts/run-ci.sh
+        ./.github/workflows/scripts/run-ci.sh
+
+
+#- name: "Start Firebase Emulator"
+#      run: firebase emulators:start --only firestore
+#      working-directory: apps/firestore_snippets
+#    - name: "Run application"
+#      uses: reactivecircus/android-emulator-runner@v2.21.0
+#      with:
+#        api-level: 30
+#        arch: x86_64
+#        target: google_apis
+#        profile: Nexus 5X
+#        working-directory: tests
+#        script: |
+#          sleep 15
+#          flutter run --dart-define=CI=true
 
