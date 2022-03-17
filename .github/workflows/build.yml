@@ -23,8 +23,7 @@ jobs:
         java-version: '11'
     - name: "Install Tools"
       run: |
-        flutter pub global activate melos 1.1.0
-        flutter config --no-analytics --no-enable-web --no-enable-ios --no-enable-macos-desktop
+        sudo ./.github/workflows/scripts/install-tools.sh
         sudo npm i -g firebase-tools
     - name: "Build Example"
       run: sudo ./.github/workflows/scripts/build-example.sh android
