@@ -9,3 +9,6 @@ if ! [ -x "$(command -v flutter)" ]; then
   echo "❌ Flutter tools CLI is missing."
   exit 1
 fi
+
+echo "Whoa, we made it"
+exit 0
