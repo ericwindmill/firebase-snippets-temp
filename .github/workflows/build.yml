@@ -1,4 +1,4 @@
-name: ci
+name: tests
 
 on:
 - pull_request
@@ -14,9 +14,9 @@ jobs:
       with:
         node-version: '16'
     - uses: actions/setup-java@v2
-        with:
-          distribution: 'temurin'
-          java-version: '11'
+      with:
+        distribution: 'temurin'
+        java-version: '11'
     - name: "Install Tools"
       run: |
         flutter config --no-enable-web --no-enable-ios --no-enable-macos-desktop
