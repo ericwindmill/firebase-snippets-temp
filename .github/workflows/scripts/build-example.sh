@@ -1,10 +1,12 @@
 #!/bin/bash
 
 DEFAULT_TARGET="./test_driver/MELOS_PARENT_PACKAGE_NAME_e2e.dart"
-ANOTHER_VAR="cool~~~~~~~~~~~~~~~~~~~~~~~~~~~``"
+ANOTHER_VAR="cool~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
 ACTION=$1
 TARGET_FILE=${2:-$DEFAULT_TARGET}
+
+
 
 melos bootstrap --scope="*firebase_core*" --scope="$FLUTTERFIRE_PLUGIN_SCOPE"
 
