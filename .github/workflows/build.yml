@@ -30,7 +30,7 @@ jobs:
     - name: "Run application"
       run: |
         chmod=+x "${GITHUB_WORKSPACE}/.github/workflows/scripts/run-ci.sh"
-        "${GITHUB_WORKSPACE}/.github/workflows/scripts/run-ci.sh"
+        sudo "${GITHUB_WORKSPACE}/.github/workflows/scripts/run-ci.sh"
 
 
 #- name: "Start Firebase Emulator"
