@@ -27,12 +27,14 @@ jobs:
         path: ~/.cache/firebase/emulators
         key: firebase-emulators-v1-${{ github.run_id }}
         restore-keys: firebase-emulators-v1
+    - name: "run chmod"
+      run: --chmod +x .github/workflows/scripts/run-ci.sh
     - name: "Run application"
       shell: bash
       run: |
-        git update-index --chmod +x .github/workflows/scripts/run-ci.sh
+        echo "git update-index --chmod +x .github/workflows/scripts/run-ci.sh"
         sudo chmod=+x "${GITHUB_WORKSPACE}/.github/workflows/scripts/run-ci.sh"
-        sudo sh "${GITHUB_WORKSPACE}/.github/workflows/scripts/run-ci.sh"
+        sudo bash "${GITHUB_WORKSPACE}/.github/workflows/scripts/run-ci.sh"
 
 
 #- name: "Start Firebase Emulator"
