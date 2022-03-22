@@ -1,0 +1,8 @@
+name: flutter-snippets
+
+
+packages:
+- packages/**
+
+scripts:
+  analyze: melos exec -- "dart analyze . --fatal-infos"
