@@ -52,7 +52,4 @@ jobs:
         # emulator target as it's considerably slower on CI.
         target: default
         profile: Nexus 5X
-        script: |
-          cd ../
-          echo pwd
-          sh ./.github/workflows/scripts/run-ci.sh android
+        script: sh ./.github/workflows/scripts/run-ci.sh android
