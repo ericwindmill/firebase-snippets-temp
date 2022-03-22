@@ -1,16 +1,13 @@
 #!/bin/bash
 
-DEFAULT_TARGET="./apps/firestore_snippets/integration_test/app_test.dart"
-
 ACTION=$1
 
 if [ "$ACTION" == "android" ]
 then
   # Sleep to allow emulator to settle.
   sleep 15
-  flutter drive $FLUTTER_COMMAND_FLAGS --no-pub --target=$DEFAULT_TARGET --dart-define=CI=true
-  EXIT_CODE=$?
-  exit $EXIT_CODE
+  melos exec -c 1 --fail-fast qualitycheck
+  exit
 fi
 
 if [ "$ACTION" == "ios" ]

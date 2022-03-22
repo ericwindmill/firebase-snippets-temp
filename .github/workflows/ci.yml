@@ -36,8 +36,6 @@ jobs:
 
     - name: "Start Firebase Emulator"
       run: |
-        echo "WAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-        pwd
         cd ./.github/workflows/scripts && sh ./start-firebase-emulator.sh
 
     - name: "Run integration tests on Android"
@@ -49,4 +47,4 @@ jobs:
         # emulator target as it's considerably slower on CI.
         target: default
         profile: Nexus 5X
-        script: sh ./.github/workflows/scripts/run-ci.sh android
+        script: sh ./.github/workflows/scripts/run_ci.sh android
