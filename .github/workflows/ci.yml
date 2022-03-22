@@ -5,7 +5,7 @@ on:
 - push
 
 jobs:
-  build:
+  android:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -43,7 +43,13 @@ jobs:
       run: |
         cd ./.github/workflows/scripts && sh ./start-firebase-emulator.sh
 
-    - name: "Run CI"
-      run: |
-        sh "${GITHUB_WORKSPACE}/.github/workflows/scripts/run-ci.sh"
-
+    - name: "Run integration tests on Emulator"
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 28
+        arch: x86_64
+        # Firebase Firestore works without Google Play Services, so we don't use the `googleapis`
+        # emulator target as it's considerably slower on CI.
+        target: default
+        profile: Nexus 5X
+        script: sh ./.github/workflows/scripts/run-ci.sh android

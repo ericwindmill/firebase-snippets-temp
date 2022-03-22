@@ -7,7 +7,6 @@ if [ "$ACTION" == "android" ]
 then
   # Sleep to allow emulator to settle.
   sleep 15
-  melos exec -c 1 --fail-fast --scope="$FLUTTERFIRE_PLUGIN_SCOPE_EXAMPLE" --dir-exists=test_driver -- \
     flutter test $FLUTTER_COMMAND_FLAGS --no-pub --target=.$DEFAULT_TARGET --dart-define=CI=true
   exit
 fi
