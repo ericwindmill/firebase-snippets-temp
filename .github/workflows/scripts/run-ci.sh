@@ -1,7 +1,8 @@
 #!/bin/bash
 
-ACTION=$1
 DEFAULT_TARGET="./apps/firestore_snippets/integration_test/app_test.dart"
+
+ACTION=$1
 
 if [ "$ACTION" == "android" ]
 then
