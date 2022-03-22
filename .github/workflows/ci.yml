@@ -36,7 +36,7 @@ jobs:
 
     - name: "Build Example"
       run: |
-        sh ./.github/workflows/scripts/build-example.sh android
+        sh ./.github/workflows/scripts/build-apps.sh android
 
 
     - name: "Start Firebase Emulator"

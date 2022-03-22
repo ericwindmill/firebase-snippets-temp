@@ -5,8 +5,9 @@ if [ "$ACTION" == "android" ]
 then
   # Sleep to allow emulator to settle.
   sleep 15
-    flutter test $FLUTTER_COMMAND_FLAGS --no-pub --target=$DEFAULT_TARGET --dart-define=CI=true
-  exit
+  flutter test $FLUTTER_COMMAND_FLAGS --no-pub --target=$DEFAULT_TARGET --dart-define=CI=true
+  EXIT_CODE=$?
+  exit $EXIT_CODE
 fi
 
 if [ "$ACTION" == "ios" ]
