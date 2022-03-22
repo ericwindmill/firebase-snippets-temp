@@ -7,11 +7,9 @@ ACTION=$1
 if [ "$ACTION" == "android" ]
 then
   # Sleep to allow emulator to settle.
-  echo "giving the emulator time to settle"
   sleep 15
   flutter drive $FLUTTER_COMMAND_FLAGS --no-pub --target=$DEFAULT_TARGET --dart-define=CI=true
   EXIT_CODE=$?
-  echo $EXIT_CODE
   exit $EXIT_CODE
 fi
 
