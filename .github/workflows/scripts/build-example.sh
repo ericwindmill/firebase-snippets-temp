@@ -1,22 +1,26 @@
 #!/bin/bash
 
-DEFAULT_TARGET="./test_driver/MELOS_PARENT_PACKAGE_NAME_e2e.dart"
-ANOTHER_VAR="cool~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+DEFAULT_TARGET="./apps/firestore_snippets/integration_test/app_test.dart"
 
 ACTION=$1
 TARGET_FILE=${2:-$DEFAULT_TARGET}
 
 
-
-melos bootstrap --scope="*firebase_core*" --scope="$FLUTTERFIRE_PLUGIN_SCOPE"
-
 if [ "$ACTION" == "android" ]
 then
-  echo $ANOTHER_VAR
-  melos exec -c 1 --scope="$FLUTTERFIRE_PLUGIN_SCOPE_EXAMPLE" -- \
-    flutter build apk $FLUTTER_COMMAND_FLAGS --debug --target="$TARGET_FILE" --dart-define=CI=true --no-android-gradle-daemon
-  MELOS_EXIT_CODE=$?
+  flutter build apk $FLUTTER_COMMAND_FLAGS --debug --target="$TARGET_FILE" --dart-define=CI=true --no-android-gradle-daemon
   pkill dart || true
   pkill java || true
-  exit $MELOS_EXIT_CODE
+fi
+
+if [ "$ACTION" == "ios" ]
+then
+  flutter build ios $FLUTTER_COMMAND_FLAGS --no-codesign --simulator --debug --target="$TARGET_FILE" --dart-define=CI=true
+  exit
+fi
+
+if [ "$ACTION" == "macos" ]
+then
+  flutter build macos $FLUTTER_COMMAND_FLAGS --debug --target="$TARGET_FILE" --device-id=macos --dart-define=CI=true
+  exit
 fi
