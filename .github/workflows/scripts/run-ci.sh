@@ -9,9 +9,6 @@ then
   # Sleep to allow emulator to settle.
   echo "giving the emulator time to settle"
   sleep 15
-  echo "running flutter test...."
-  echo $FLUTTER_COMMAND_FLAGS
-  pwd
   flutter drive $FLUTTER_COMMAND_FLAGS --no-pub --target=$DEFAULT_TARGET --dart-define=CI=true
   EXIT_CODE=$?
   echo $EXIT_CODE
